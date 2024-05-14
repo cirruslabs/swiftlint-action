@@ -1,0 +1,81 @@
+name: Continuous Integration
+
+on:
+  push:
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ghcr.io/cirruslabs/ubuntu-runner-arm64:22.04-md
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Check format
+        run: npm run format:check
+
+      - name: Lint
+        run: npm run lint
+
+  check-dist:
+    name: Check dist/
+    runs-on: ghcr.io/cirruslabs/ubuntu-runner-arm64:22.04-md
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build dist/
+        id: build
+        run: npm run bundle
+
+      - name: Find differences
+        run: |
+          if [ ! -d dist/ ]; then
+            echo "Expected dist/ directory does not exist.  See status below:"
+            ls -la ./
+            exit 1
+          fi
+          if [ "$(git diff --ignore-space-at-eol --text dist/ | wc -l)" -gt "0" ]; then
+            echo "Detected uncommitted changes after build. See status below:"
+            git diff --ignore-space-at-eol --text dist/
+            exit 1
+          fi
+
+  integration-test:
+    name: Integration test
+    runs-on: ghcr.io/cirruslabs/macos-sonoma-xcode:latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Test SwiftLint Action (using latest SwiftLint)
+        uses: ./
+
+      - name: Test SwiftLint Action (using a specific version of SwiftLint)
+        uses: ./
+        with:
+          version: 0.55.0

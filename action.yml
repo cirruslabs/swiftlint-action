@@ -1,23 +1,16 @@
-name: 'The name of your action here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'SwiftLint Action'
+description: 'Run SwiftLint from your GitHub Actions with ease'
+author: 'Cirrus Labs, Inc.'
 
-# Add your action's branding here. This will appear on the GitHub Marketplace.
 branding:
-  icon: 'heart'
-  color: 'red'
+  icon: 'file-text'
+  color: 'purple'
 
-# Define your inputs here.
 inputs:
-  milliseconds:
-    description: 'Your input description here'
-    required: true
-    default: '1000'
-
-# Define your outputs here.
-outputs:
-  time:
-    description: 'Your output description here'
+  version:
+    description: 'SwiftLint version to use or "latest" to query the latest available version'
+    required: false
+    default: 'latest'
 
 runs:
   using: node20
