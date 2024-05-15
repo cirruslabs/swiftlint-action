@@ -54,7 +54,10 @@ export async function run(): Promise<void> {
     // Run the SwiftLint binary and capture its standard output
     const output = await exec.getExecOutput(
       path.join(portableSwiftlintDir, 'swiftlint'),
-      ['lint', '--reporter=json']
+      ['lint', '--reporter=json'],
+      {
+        ignoreReturnCode: true
+      }
     )
 
     // Parse the SwiftLint's JSON output
