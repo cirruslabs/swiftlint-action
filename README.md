@@ -1,6 +1,6 @@
-# SwiftLint Action
+Run [SwiftLint](https://github.com/realm/SwiftLint) from your GitHub Actions with ease and annotations.
 
-Run SwiftLint from your GitHub Actions with ease.
+Works with GitHub-managed runners, self-hosted runners and runners from services like [Cirrus Runners](https://cirrus-runners.app/).
 
 ## Usage
 
@@ -9,20 +9,4 @@ steps:
   - uses: cirruslabs/swiftlint-action@v1
     with:
       version: latest
-```
-
-## Development
-
-After you've cloned the repository to your local machine, install the
-dependencies:
-
-```shell
-npm install
-```
-
-To package the action for distribution after making the changes to the
-TypeScript code, run the following command:
-
-```shell
-npm run bundle
 ```
