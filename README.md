@@ -12,3 +12,25 @@ steps:
     with:
       version: latest
 ```
+
+Here is a full example of a workflow file:
+
+```yaml
+# .github/workflows/swiftlint.yml
+name: SwiftLint
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  SwiftLint:
+    runs-on: ghcr.io/cirruslabs/macos-runner:sonoma
+    steps:
+      - uses: actions/checkout@v4
+      - uses: cirruslabs/swiftlint-action@v1
+        with:
+          version: latest
+```
