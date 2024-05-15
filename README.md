@@ -7,6 +7,8 @@ Run SwiftLint from your GitHub Actions with ease.
 ```yaml
 steps:
   - uses: cirruslabs/swiftlint-action@v1
+    with:
+      version: latest
 ```
 
 ## Development
