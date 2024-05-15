@@ -66,7 +66,7 @@ jobs:
 
   integration-test:
     name: Integration test
-    runs-on: ghcr.io/cirruslabs/macos-sonoma-xcode:latest
+    runs-on: ghcr.io/cirruslabs/macos-runner:sonoma
 
     steps:
       - name: Checkout
