@@ -53,9 +53,13 @@ export async function run(): Promise<void> {
     // Run the SwiftLint binary and capture its standard output
     let stdout = ''
 
+    const swiftlintArgs = ['lint', '--reporter=json']
+    if (core.getInput('strict') === 'true') {
+      swiftlintArgs.push('--strict')
+    }
     await exec.exec(
       path.join(portableSwiftlintDir, 'swiftlint'),
-      ['lint', '--reporter=json'],
+      swiftlintArgs,
       {
         listeners: {
           stdout: (data: Buffer) => {

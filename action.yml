@@ -11,6 +11,10 @@ inputs:
     description: 'SwiftLint version to use or "latest" to query the latest available version'
     required: false
     default: 'latest'
+  strict:
+    description: 'Upgrades warnings to serious violations (errors)'
+    required: false
+    default: 'false'
 
 runs:
   using: node20
