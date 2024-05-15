@@ -1,6 +1,10 @@
-# SwiftLint Action
+Run [SwiftLint](https://github.com/realm/SwiftLint) from your GitHub Actions
+with ease and annotations.
 
-Run SwiftLint from your GitHub Actions with ease.
+<img width="1010" alt="SwiftLintDemoPR" src="https://github.com/cirruslabs/swiftlint-action/assets/989066/70f99351-4889-4a72-bbbf-e6cc9ab9b25f">
+
+Works with GitHub-managed runners, self-hosted runners and runners from services
+like [Cirrus Runners](https://cirrus-runners.app/).
 
 ## Usage
 
@@ -11,18 +15,24 @@ steps:
       version: latest
 ```
 
-## Development
+Here is a full example of a workflow file:
 
-After you've cloned the repository to your local machine, install the
-dependencies:
+```yaml
+# .github/workflows/swiftlint.yml
+name: SwiftLint
 
-```shell
-npm install
-```
+on:
+  push:
+    branches: ['main']
+  pull_request:
+    branches: ['main']
 
-To package the action for distribution after making the changes to the
-TypeScript code, run the following command:
-
-```shell
-npm run bundle
+jobs:
+  SwiftLint:
+    runs-on: ghcr.io/cirruslabs/macos-runner:sonoma
+    steps:
+      - uses: actions/checkout@v4
+      - uses: cirruslabs/swiftlint-action@v1
+        with:
+          version: latest
 ```
