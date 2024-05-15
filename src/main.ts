@@ -57,10 +57,11 @@ export async function run(): Promise<void> {
     if (core.getInput('strict') === 'true') {
       swiftlintArgs.push('--strict')
     }
-    await exec.exec(
+    const returnCode = await exec.exec(
       path.join(portableSwiftlintDir, 'swiftlint'),
       swiftlintArgs,
       {
+        ignoreReturnCode: true,
         listeners: {
           stdout: (data: Buffer) => {
             stdout += data.toString()
@@ -96,6 +97,8 @@ export async function run(): Promise<void> {
         startColumn: entry.character
       })
     }
+
+    process.exit(returnCode)
   } catch (error) {
     // Fail the workflow run if an error occurs
     if (error instanceof Error) core.setFailed(error.message)

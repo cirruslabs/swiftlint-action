@@ -28853,7 +28853,8 @@ async function run() {
         if (core.getInput('strict') === 'true') {
             swiftlintArgs.push('--strict');
         }
-        await exec.exec(path_1.default.join(portableSwiftlintDir, 'swiftlint'), swiftlintArgs, {
+        const returnCode = await exec.exec(path_1.default.join(portableSwiftlintDir, 'swiftlint'), swiftlintArgs, {
+            ignoreReturnCode: true,
             listeners: {
                 stdout: (data) => {
                     stdout += data.toString();
@@ -28881,6 +28882,7 @@ async function run() {
                 startColumn: entry.character
             });
         }
+        process.exit(returnCode);
     }
     catch (error) {
         // Fail the workflow run if an error occurs
