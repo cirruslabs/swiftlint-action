@@ -28849,7 +28849,9 @@ async function run() {
             portableSwiftlintDir = await tc.cacheDir(toolDir, toolName, version);
         }
         // Run the SwiftLint binary and capture its standard output
-        const output = await exec.getExecOutput(path_1.default.join(portableSwiftlintDir, 'swiftlint'), ['lint', '--reporter=json']);
+        const output = await exec.getExecOutput(path_1.default.join(portableSwiftlintDir, 'swiftlint'), ['lint', '--reporter=json'], {
+            ignoreReturnCode: true
+        });
         // Parse the SwiftLint's JSON output
         // and emit annotations
         const result = JSON.parse(output.stdout);
