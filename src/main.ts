@@ -2,6 +2,7 @@ import * as core from '@actions/core'
 import * as tc from '@actions/tool-cache'
 import * as exec from '@actions/exec'
 import path from 'path'
+import * as process from 'node:process'
 
 interface Entry {
   file?: string
@@ -51,28 +52,14 @@ export async function run(): Promise<void> {
     }
 
     // Run the SwiftLint binary and capture its standard output
-    let stdout = ''
-
-    const swiftlintArgs = ['lint', '--reporter=json']
-    if (core.getInput('strict') === 'true') {
-      swiftlintArgs.push('--strict')
-    }
-    const returnCode = await exec.exec(
+    const output = await exec.getExecOutput(
       path.join(portableSwiftlintDir, 'swiftlint'),
-      swiftlintArgs,
-      {
-        ignoreReturnCode: true,
-        listeners: {
-          stdout: (data: Buffer) => {
-            stdout += data.toString()
-          }
-        }
-      }
+      ['lint', '--reporter=json']
     )
 
     // Parse the SwiftLint's JSON output
     // and emit annotations
-    const result: Entry[] = JSON.parse(stdout)
+    const result: Entry[] = JSON.parse(output.stdout)
 
     for (const entry of result) {
       let annotationFunc: (
@@ -90,6 +77,14 @@ export async function run(): Promise<void> {
           break
       }
 
+      // relativize the file path to the working directory
+      if (entry.file) {
+        entry.file = path.relative(
+          process.env.GITHUB_WORKSPACE || process.cwd(),
+          entry.file
+        )
+      }
+
       annotationFunc(entry.reason, {
         title: `${entry.type} (${entry.rule_id})`,
         file: entry.file,
@@ -98,7 +93,7 @@ export async function run(): Promise<void> {
       })
     }
 
-    process.exit(returnCode)
+    process.exit(output.exitCode)
   } catch (error) {
     // Fail the workflow run if an error occurs
     if (error instanceof Error) core.setFailed(error.message)
