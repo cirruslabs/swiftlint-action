@@ -1,3 +1,5 @@
+# SwiftLint Action
+
 Run [SwiftLint](https://github.com/realm/SwiftLint) from your GitHub Actions
 with ease and annotations.
 
