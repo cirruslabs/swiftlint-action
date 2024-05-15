@@ -28819,6 +28819,7 @@ const core = __importStar(__nccwpck_require__(2186));
 const tc = __importStar(__nccwpck_require__(7784));
 const exec = __importStar(__nccwpck_require__(1514));
 const path_1 = __importDefault(__nccwpck_require__(1017));
+const process = __importStar(__nccwpck_require__(7742));
 async function run() {
     try {
         const version = core.getInput('version');
@@ -28848,22 +28849,10 @@ async function run() {
             portableSwiftlintDir = await tc.cacheDir(toolDir, toolName, version);
         }
         // Run the SwiftLint binary and capture its standard output
-        let stdout = '';
-        const swiftlintArgs = ['lint', '--reporter=json'];
-        if (core.getInput('strict') === 'true') {
-            swiftlintArgs.push('--strict');
-        }
-        const returnCode = await exec.exec(path_1.default.join(portableSwiftlintDir, 'swiftlint'), swiftlintArgs, {
-            ignoreReturnCode: true,
-            listeners: {
-                stdout: (data) => {
-                    stdout += data.toString();
-                }
-            }
-        });
+        const output = await exec.getExecOutput(path_1.default.join(portableSwiftlintDir, 'swiftlint'), ['lint', '--reporter=json']);
         // Parse the SwiftLint's JSON output
         // and emit annotations
-        const result = JSON.parse(stdout);
+        const result = JSON.parse(output.stdout);
         for (const entry of result) {
             let annotationFunc;
             switch (entry.severity.toLowerCase()) {
@@ -28875,6 +28864,10 @@ async function run() {
                     annotationFunc = core.error;
                     break;
             }
+            // relativize the file path to the working directory
+            if (entry.file) {
+                entry.file = path_1.default.relative(process.env.GITHUB_WORKSPACE || process.cwd(), entry.file);
+            }
             annotationFunc(entry.reason, {
                 title: `${entry.type} (${entry.rule_id})`,
                 file: entry.file,
@@ -28882,7 +28875,7 @@ async function run() {
                 startColumn: entry.character
             });
         }
-        process.exit(returnCode);
+        process.exit(output.exitCode);
     }
     catch (error) {
         // Fail the workflow run if an error occurs
@@ -29004,6 +28997,14 @@ module.exports = require("net");
 
 "use strict";
 module.exports = require("node:events");
+
+/***/ }),
+
+/***/ 7742:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("node:process");
 
 /***/ }),
 
