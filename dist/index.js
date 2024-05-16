@@ -28841,12 +28841,13 @@ async function run() {
         const toolName = `swiftlint-${process.platform}`;
         let portableSwiftlintDir = tc.find(toolName, version);
         // Download the SwiftLint binary if not found in the tool cache
-        // or we're using the "latest" version
-        if (portableSwiftlintDir === '' || version === 'latest') {
-            const toolPath = await tc.downloadTool(url);
-            const toolDir = await tc.extractZip(toolPath);
+        if (portableSwiftlintDir === '') {
+            portableSwiftlintDir = await tc.extractZip(await tc.downloadTool(url));
             // Cache the SwiftLint binary in the tool cache
-            portableSwiftlintDir = await tc.cacheDir(toolDir, toolName, version);
+            // if it's not the "latest" version
+            if (version !== 'latest') {
+                await tc.cacheDir(portableSwiftlintDir, toolName, version);
+            }
         }
         // Run the SwiftLint binary and capture its standard output
         const output = await exec.getExecOutput(path_1.default.join(portableSwiftlintDir, 'swiftlint'), ['lint', '--reporter=json'], {
