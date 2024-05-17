@@ -79,3 +79,4 @@ jobs:
         uses: ./
         with:
           version: 0.55.0
+          args: --enable-all-rules --in-process-sourcekit
