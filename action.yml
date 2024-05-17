@@ -3,7 +3,7 @@ description: 'Run SwiftLint from your GitHub Actions with ease and annotations'
 author: 'Cirrus Labs, Inc.'
 
 branding:
-  icon: 'activity'
+  icon: 'feather'
   color: 'green'
 
 inputs:
