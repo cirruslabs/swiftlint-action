@@ -1,10 +1,10 @@
-name: 'SwiftLint Action'
-description: 'Run SwiftLint from your GitHub Actions with ease'
+name: 'SwiftLint Annotations'
+description: 'Run SwiftLint from your GitHub Actions with ease and annotations'
 author: 'Cirrus Labs, Inc.'
 
 branding:
-  icon: 'file-text'
-  color: 'purple'
+  icon: 'feather'
+  color: 'green'
 
 inputs:
   version:
