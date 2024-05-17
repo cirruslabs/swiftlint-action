@@ -28817,6 +28817,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.run = void 0;
 const core = __importStar(__nccwpck_require__(2186));
 const tc = __importStar(__nccwpck_require__(7784));
+const tr = __importStar(__nccwpck_require__(8159));
 const exec = __importStar(__nccwpck_require__(1514));
 const path_1 = __importDefault(__nccwpck_require__(1017));
 const process = __importStar(__nccwpck_require__(7742));
@@ -28850,7 +28851,12 @@ async function run() {
             }
         }
         // Run the SwiftLint binary and capture its standard output
-        const output = await exec.getExecOutput(path_1.default.join(portableSwiftlintDir, 'swiftlint'), ['lint', '--reporter=json'], {
+        const swiftlintArgs = ['lint', '--reporter=json'];
+        const additionalArgs = core.getInput('args');
+        if (additionalArgs) {
+            swiftlintArgs.push(...tr.argStringToArray(additionalArgs));
+        }
+        const output = await exec.getExecOutput(path_1.default.join(portableSwiftlintDir, 'swiftlint'), swiftlintArgs, {
             ignoreReturnCode: true
         });
         // Parse the SwiftLint's JSON output

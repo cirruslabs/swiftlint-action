@@ -1,5 +1,6 @@
 import * as core from '@actions/core'
 import * as tc from '@actions/tool-cache'
+import * as tr from '@actions/exec/lib/toolrunner'
 import * as exec from '@actions/exec'
 import path from 'path'
 import * as process from 'node:process'
@@ -53,9 +54,14 @@ export async function run(): Promise<void> {
     }
 
     // Run the SwiftLint binary and capture its standard output
+    const swiftlintArgs = ['lint', '--reporter=json']
+    const additionalArgs = core.getInput('args')
+    if (additionalArgs) {
+      swiftlintArgs.push(...tr.argStringToArray(additionalArgs))
+    }
     const output = await exec.getExecOutput(
       path.join(portableSwiftlintDir, 'swiftlint'),
-      ['lint', '--reporter=json'],
+      swiftlintArgs,
       {
         ignoreReturnCode: true
       }
