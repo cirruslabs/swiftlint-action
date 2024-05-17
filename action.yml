@@ -1,5 +1,5 @@
-name: 'Lint Swift Action'
-description: 'Run SwiftLint from your GitHub Actions with ease'
+name: 'SwiftLint Annotations'
+description: 'Run SwiftLint from your GitHub Actions with ease and annotations'
 author: 'Cirrus Labs, Inc.'
 
 branding:
