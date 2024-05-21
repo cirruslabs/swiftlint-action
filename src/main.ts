@@ -19,23 +19,37 @@ export async function run(): Promise<void> {
   try {
     const version: string = core.getInput('version')
 
-    // Fail the workflow run if we're not running on macOS
-    if (process.platform !== 'darwin') {
-      core.setFailed(
-        `Unsupported OS "${process.platform}, only "darwin" is currently supported`
-      )
-
-      return
-    }
-
     // Determine the asset URL
     let url: string
 
     if (version !== 'latest') {
-      url = `https://github.com/realm/SwiftLint/releases/download/${version}/portable_swiftlint.zip`
+      url = `https://github.com/realm/SwiftLint/releases/download/${version}/`
     } else {
-      url =
-        'https://github.com/realm/SwiftLint/releases/latest/download/portable_swiftlint.zip'
+      url = 'https://github.com/realm/SwiftLint/releases/latest/download/'
+    }
+
+    if (process.platform === 'darwin') {
+      // SwiftLint's binaries for Darwin are universal
+      url += 'portable_swiftlint.zip'
+    } else if (process.platform === 'linux') {
+      // SwiftLint's binaries for Linux are x64-only[1]
+      //
+      // [1]: https://github.com/realm/SwiftLint/issues/4531
+      if (process.arch === 'x64') {
+        core.setFailed(
+          `Unsupported Linux architecture "${process.arch}", only "x64" is currently supported`
+        )
+
+        return
+      }
+
+      url += 'swiftlint_linux.zip'
+    } else {
+      core.setFailed(
+        `Unsupported OS "${process.platform}", only "darwin" and "linux" are currently supported`
+      )
+
+      return
     }
 
     // Retrieve the SwiftLint binary from the tool cache
