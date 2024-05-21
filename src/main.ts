@@ -35,7 +35,7 @@ export async function run(): Promise<void> {
       // SwiftLint's binaries for Linux are x64-only[1]
       //
       // [1]: https://github.com/realm/SwiftLint/issues/4531
-      if (process.arch === 'x64') {
+      if (process.arch !== 'x64') {
         core.setFailed(
           `Unsupported Linux architecture "${process.arch}", only "x64" is currently supported`
         )
