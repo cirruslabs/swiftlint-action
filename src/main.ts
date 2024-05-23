@@ -4,6 +4,8 @@ import * as tr from '@actions/exec/lib/toolrunner'
 import * as exec from '@actions/exec'
 import path from 'path'
 import * as process from 'node:process'
+import * as fs from 'node:fs'
+import * as yaml from 'js-yaml'
 
 interface Entry {
   file?: string
@@ -15,9 +17,14 @@ interface Entry {
   reason: string
 }
 
+interface Config {
+  swiftlint_version: string
+}
+
 export async function run(): Promise<void> {
   try {
-    const version: string = core.getInput('version')
+    // Determine the version to use
+    const version = determineVersion()
 
     // Determine the asset URL
     let url: string
@@ -122,4 +129,30 @@ export async function run(): Promise<void> {
     // Fail the workflow run if an error occurs
     if (error instanceof Error) core.setFailed(error.message)
   }
+}
+
+function determineVersion(): string {
+  const userProvidedVersion: string = core.getInput('version')
+
+  // If the user had specified a version, use it
+  if (userProvidedVersion !== '') {
+    return userProvidedVersion
+  }
+
+  // If no version is specified, try reading the SwiftLint's configuration to see
+  // which version was requested and use it to avoid failing due to version mismatch
+  const swiftLintConfigPath = path.join(process.cwd(), '.swiftlint.yml')
+
+  if (fs.existsSync(swiftLintConfigPath)) {
+    const swiftLintConfigRaw = fs.readFileSync(swiftLintConfigPath, 'utf-8')
+
+    const swiftLintConfig = yaml.load(swiftLintConfigRaw) as Config
+
+    if (swiftLintConfig.swiftlint_version !== undefined) {
+      return swiftLintConfig.swiftlint_version
+    }
+  }
+
+  // Otherwise, use the latest version
+  return 'latest'
 }
