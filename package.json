@@ -47,13 +47,13 @@
     "js-yaml": "^4.1.0"
   },
   "devDependencies": {
-    "@types/node": "^22.8.7",
+    "@types/node": "^22.9.0",
     "@typescript-eslint/eslint-plugin": "^7.18.0",
     "@typescript-eslint/parser": "^7.18.0",
     "@vercel/ncc": "^0.38.2",
     "eslint": "^8.57.1",
     "eslint-plugin-github": "^5.0.2",
-    "eslint-plugin-jsonc": "^2.16.0",
+    "eslint-plugin-jsonc": "^2.18.1",
     "eslint-plugin-prettier": "^5.2.1",
     "prettier": "^3.3.3",
     "prettier-eslint": "^16.3.0",
