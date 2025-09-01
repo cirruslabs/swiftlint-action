@@ -32372,14 +32372,17 @@ async function run() {
             url += 'portable_swiftlint.zip';
         }
         else if (process.platform === 'linux') {
-            // SwiftLint's binaries for Linux are x64-only[1]
-            //
-            // [1]: https://github.com/realm/SwiftLint/issues/4531
-            if (process.arch !== 'x64') {
-                core.setFailed(`Unsupported Linux architecture "${process.arch}", only "x64" is currently supported`);
-                return;
+            switch (process.arch) {
+                case 'x64':
+                    url += 'swiftlint_linux_amd64.zip';
+                    break;
+                case 'arm64':
+                    url += 'swiftlint_linux_arm64.zip';
+                    break;
+                default:
+                    core.setFailed(`Unsupported Linux architecture "${process.arch}", only "x64" and "arm64" are currently supported`);
+                    return;
             }
-            url += 'swiftlint_linux.zip';
         }
         else {
             core.setFailed(`Unsupported OS "${process.platform}", only "darwin" and "linux" are currently supported`);
