@@ -95,7 +95,7 @@ jobs:
       - name: Export LINUX_SOURCEKIT_LIB_PATH
         if: runner.os == 'Linux'
         run: |
-          echo "LINUX_SOURCEKIT_LIB_PATH=$(swiftly use -p)/usr/lib" >> $GITHUB_ENV
+          echo "LINUX_SOURCEKIT_LIB_PATH=$(~/.local/share/swiftly/bin/swiftly use -p)/usr/lib" >> $GITHUB_ENV
 
       - name: Test SwiftLint Action (using latest SwiftLint)
         uses: ./
