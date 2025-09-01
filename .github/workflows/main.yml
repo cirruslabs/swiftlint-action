@@ -104,4 +104,4 @@ jobs:
         uses: ./
         with:
           version: 0.60.0
-          args: --enable-all-rules --in-process-sourcekit
+          args: --enable-all-rules
