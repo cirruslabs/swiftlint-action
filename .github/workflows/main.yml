@@ -66,7 +66,13 @@ jobs:
 
   integration-test:
     name: Integration test
-    runs-on: ghcr.io/cirruslabs/macos-runner:sonoma
+    strategy:
+      matrix:
+        image:
+          - ghcr.io/cirruslabs/macos-runner:sonoma
+          - ghcr.io/cirruslabs/ubuntu-runner-amd64:24.04-md
+          - ghcr.io/cirruslabs/ubuntu-runner-arm64:24.04-md
+    runs-on: ${{ matrix.image }}
 
     steps:
       - name: Checkout
