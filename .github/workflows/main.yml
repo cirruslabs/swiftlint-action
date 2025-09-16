@@ -90,6 +90,7 @@ jobs:
       - name: Install APT packages required by Swift
         if: runner.os == 'Linux'
         run: |
+          sudo apt-get update
           sudo apt-get -y install binutils unzip gnupg2 libcurl4-openssl-dev libgcc-13-dev libpython3-dev libstdc++-13-dev libxml2-dev libncurses-dev libz3-dev pkg-config zlib1g-dev
 
       - name: Export LINUX_SOURCEKIT_LIB_PATH
