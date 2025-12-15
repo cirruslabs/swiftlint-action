@@ -36,8 +36,8 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@actions/core": "^1.11.1",
-    "@actions/exec": "^1.1.1",
+    "@actions/core": "^2.0.1",
+    "@actions/exec": "^2.0.0",
     "@actions/tool-cache": "^2.0.2",
     "@octokit/action": "^8.0.4",
     "@octokit/auth-action": "^6.0.2",
@@ -47,7 +47,7 @@
     "js-yaml": "^4.1.1"
   },
   "devDependencies": {
-    "@types/node": "^24.10.1",
+    "@types/node": "^25.0.2",
     "@typescript-eslint/eslint-plugin": "^7.18.0",
     "@typescript-eslint/parser": "^7.18.0",
     "@vercel/ncc": "^0.38.4",
